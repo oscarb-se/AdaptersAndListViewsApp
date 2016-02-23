@@ -2,19 +2,15 @@ package se.oscarb.adaptersandlistviews;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     // Instansvariabel
-    ArrayList<String> cars;
+    ArrayList<String> carStrings;
 
 
     @Override
@@ -22,12 +18,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initiera vår ArrayList
-        cars = new ArrayList<>();
+        // Initiera vår ArrayList carStrings med strängar
+        carStrings = new ArrayList<>();
+        carStrings.add("Volvo"); // Notera att Volvo är en String, inte ett Car-objekt...
 
-        // Lägg till i cars...
 
-
+        // En bättre lista över bilar (med objekt av typen Car)
+        Garage myGarage = new Garage();
+        ArrayList<Car> carsFromGarage = myGarage.getCars();
 
 
         // Hämta vår ListView
@@ -36,17 +34,22 @@ public class MainActivity extends AppCompatActivity {
         // Skapa adapter med egen TextView
         ArrayAdapter<String> myBuiltInArrayAdapter = new ArrayAdapter<>(this,
                 R.layout.my_text_view,
-                cars);
+                carStrings);
 
         // Eller
 
         // Skapa anpassad adapter med egen layout
-        MyCustomAdapter myCustomAdapter = new MyCustomAdapter(this, R.layout.my_text_view, cars);
+        MyCustomAdapter myCustomAdapter = new MyCustomAdapter(this, R.layout.my_text_view, carStrings);
+
+
+        // Skapa en anpassad adapter för en egen layout och en samling Cars
+        MyCarArrayAdapter myCarArrayAdapter = new MyCarArrayAdapter(this, android.R.layout.simple_list_item_1, carsFromGarage);
 
         // Använd vår adapter
         //myListView.setAdapter(myBuiltInArrayAdapter);
+        //myListView.setAdapter(myCustomAdapter);
+        myListView.setAdapter(myCarArrayAdapter);
 
-        myListView.setAdapter(myCustomAdapter);
 
     }
 }
