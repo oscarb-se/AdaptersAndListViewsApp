@@ -26,25 +26,6 @@ public class MainActivity extends AppCompatActivity {
         cars = new ArrayList<>();
 
         // Lägg till i cars...
-        cars.add("Toyota");
-        cars.add("Volvo");
-        cars.add("Mercedes");
-        cars.add("Ferrari");
-        cars.add("BMW");
-        cars.add("Lamborghini");
-        cars.add("Saab");
-        cars.add("Ford");
-        cars.add("Chevrolet");
-        cars.add("Cadillac");
-        cars.add("Chrysler");
-        cars.add("Dodge");
-        cars.add("Jeep");
-        cars.add("Fiat");
-        cars.add("Renault");
-        cars.add("Nissan");
-        cars.add("Peugeot");
-        cars.add("Honda");
-        cars.add("Lada");
 
 
 
