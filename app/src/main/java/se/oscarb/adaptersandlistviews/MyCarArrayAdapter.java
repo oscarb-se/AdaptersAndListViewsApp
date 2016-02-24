@@ -1,6 +1,10 @@
 package se.oscarb.adaptersandlistviews;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,8 +87,33 @@ public class MyCarArrayAdapter extends ArrayAdapter<Car> {
         // Sätt värden
         returnedViewHolder.topText.setText(carName);
         returnedViewHolder.bottomText.setText("Position" + position);
-        returnedViewHolder.icon.setImageResource(carLogotypeId);
+        //returnedViewHolder.icon.setImageResource(carLogotypeId); // ersatt med optimerad variant
+
+        // Den optimerade varianten
+        Bitmap bitmap = ResizeImage.getOptimizedBitmap(context, carLogotypeId, 100, 100);
+        returnedViewHolder.icon.setImageBitmap(bitmap);
+
+        // Mer optimerad variant för bilder
+        // Från: http://developer.android.com/training/displaying-bitmaps/load-bitmap.html#read-bitmap
+
+        // Inställningar till vår BitMapFactory
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        // Utläs endast bildens egenskaper (höjd, bredd o.s.v. men inte bilden självt)
+        options.inJustDecodeBounds = true;
+
+        // Använd BitMapFactory för att ta reda på bildens bredd och höjd
+        BitmapFactory.decodeResource(context.getResources(), carLogotypeId, options);
+        int imageHeight = options.outHeight;
+        int imageWidth = options.outWidth;
+        String imageType = options.outMimeType;
+
+        Log.i("IMAGE ORIGINAL INFO", "" + context.getResources().getResourceEntryName(carLogotypeId) + " height: " + imageHeight + " width: " + imageWidth + "type:" + imageType );
+
+        Log.i("AFTER DECODE", "New height: " + ((Rect) returnedViewHolder.icon.getDrawable().getBounds()).height() + " New width:" + ((Rect) returnedViewHolder.icon.getDrawable().getBounds()).width() );
+
 
         return itemView;
     }
+
+
 }
