@@ -109,6 +109,7 @@ public class MyCarArrayAdapter extends ArrayAdapter<Car> {
 
         Log.i("IMAGE ORIGINAL INFO", "" + context.getResources().getResourceEntryName(carLogotypeId) + " height: " + imageHeight + " width: " + imageWidth + "type:" + imageType );
 
+        // TODO: Hitta ny bredd och höjd på bilden
         Log.i("AFTER DECODE", "New height: " + ((Rect) returnedViewHolder.icon.getDrawable().getBounds()).height() + " New width:" + ((Rect) returnedViewHolder.icon.getDrawable().getBounds()).width() );
 
 

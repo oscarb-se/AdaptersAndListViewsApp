@@ -2,8 +2,12 @@ package se.oscarb.adaptersandlistviews;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Hämta vår ListView
-        ListView myListView = (ListView) findViewById(R.id.my_list_view);
+        final ListView myListView = (ListView) findViewById(R.id.my_list_view);
 
         // Skapa adapter med egen TextView
         ArrayAdapter<String> myBuiltInArrayAdapter = new ArrayAdapter<>(this,
@@ -43,12 +47,25 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Skapa en anpassad adapter för en egen layout och en samling Cars
-        MyCarArrayAdapter myCarArrayAdapter = new MyCarArrayAdapter(this, android.R.layout.simple_list_item_1, carsFromGarage);
+        final MyCarArrayAdapter myCarArrayAdapter = new MyCarArrayAdapter(this, android.R.layout.simple_list_item_1, carsFromGarage);
 
         // Använd vår adapter
         //myListView.setAdapter(myBuiltInArrayAdapter);
         //myListView.setAdapter(myCustomAdapter);
         myListView.setAdapter(myCarArrayAdapter);
+
+        // Det ska hända något när man klickar på ett item i listan
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "Position: " + position + " id: " + id, Toast.LENGTH_LONG).show();
+
+                // Ta bort en bil från listan
+                Car carToRemove = myCarArrayAdapter.getItem(position);; // vilken bil ska vi ta bort?
+                myCarArrayAdapter.remove(carToRemove); // Men vilken bil...?
+
+            }
+        });
 
 
     }
