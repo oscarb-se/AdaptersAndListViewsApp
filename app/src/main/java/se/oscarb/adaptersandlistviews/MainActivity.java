@@ -60,10 +60,22 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(MainActivity.this, "Position: " + position + " id: " + id, Toast.LENGTH_LONG).show();
 
+
+
+            }
+        });
+
+        // Vad som ska se vid långa knapptryck
+        myListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "Long click!", Toast.LENGTH_SHORT).show();
+
                 // Ta bort en bil från listan
                 Car carToRemove = myCarArrayAdapter.getItem(position);; // vilken bil ska vi ta bort?
                 myCarArrayAdapter.remove(carToRemove); // Men vilken bil...?
 
+                return false;
             }
         });
 
