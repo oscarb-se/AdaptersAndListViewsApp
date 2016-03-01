@@ -1,5 +1,7 @@
 package se.oscarb.adaptersandlistviews;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -68,12 +70,41 @@ public class MainActivity extends AppCompatActivity {
         // Vad som ska se vid långa knapptryck
         myListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 Toast.makeText(MainActivity.this, "Long click!", Toast.LENGTH_SHORT).show();
 
-                // Ta bort en bil från listan
-                Car carToRemove = myCarArrayAdapter.getItem(position);; // vilken bil ska vi ta bort?
-                myCarArrayAdapter.remove(carToRemove); // Men vilken bil...?
+                // Innan vi tar bort bilen, gör en dialogruta och fråga om det är ok!
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
+                // Anpassa dialogrutan så som vi önskar
+                alertDialogBuilder.setMessage("Do you want to delete the car?");
+
+                // Bestäm text och funktion för vår cancel-knapp
+                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Kod som körs när man klickar på Cancel
+                        Toast.makeText(MainActivity.this, "Phew, no car deleted!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // Text och funktion för vår Delete-knapp
+                alertDialogBuilder.setPositiveButton("Delete away!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Kod som ska köras när man klickar på "Delete away"!
+
+                        // Ta bort en bil från listan
+                        Car carToRemove = myCarArrayAdapter.getItem(position);
+                        ; // vilken bil ska vi ta bort?
+                        myCarArrayAdapter.remove(carToRemove); // Men vilken bil...?
+                    }
+                });
+
+                // Sätt samman dialogruta och visa upp den
+                alertDialogBuilder.create();
+                alertDialogBuilder.show();
+
 
                 return false;
             }
