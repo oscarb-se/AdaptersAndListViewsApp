@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements CustomDialogFragm
     // Instansvariabel
     ArrayList<String> carStrings;
     MyCarArrayAdapter myCarArrayAdapter;
+    private int lastClickedPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +78,17 @@ public class MainActivity extends AppCompatActivity implements CustomDialogFragm
                 // Här fanns det kod för att skapa en dialogruta, men det är nu flyttat till en egen klass
                 // Kolla i klassen CustomDialogFragment
 
+                // Kom ihåg position (vilken man klickade på) tills senare
+                lastClickedPosition = position;
+
+                // Vilken bil ska tas bort?
+                Car carToRemove = myCarArrayAdapter.getItem(lastClickedPosition);
+
                 // Skapa en ny instans av vår egen klass CustomDialogFragment
-                DialogFragment dialog = new CustomDialogFragment();
+                CustomDialogFragment dialog = new CustomDialogFragment();
+                // Skicka med vilken bil som ska tas bort till dialogrutan
+                dialog.setCar(carToRemove);
+                // Visa dialogrutan
                 dialog.show(getSupportFragmentManager(), "CustomDialogFragment");
 
                 return false;
@@ -99,13 +109,8 @@ public class MainActivity extends AppCompatActivity implements CustomDialogFragm
     public void onDeleteClick(DialogFragment dialog) {
         // Kod som ska köras när man klickar på Delete i en dialogruta
 
-        // TODO: Fixa så att det blir rätt position
-        // Tills dess, påhittad position:
-        int position = 0;
-
-
         // Ta bort en bil från listan
-        Car carToRemove = myCarArrayAdapter.getItem(position);
+        Car carToRemove = myCarArrayAdapter.getItem(lastClickedPosition);
         ; // vilken bil ska vi ta bort?
         myCarArrayAdapter.remove(carToRemove); // Men vilken bil...?
 

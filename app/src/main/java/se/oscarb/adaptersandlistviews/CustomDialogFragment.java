@@ -19,6 +19,9 @@ public class CustomDialogFragment extends DialogFragment {
     // definierad i klassen activity pekar på (i vårt fall MainActivity)
     CustomDialogClickListener activity;
 
+    // Instansvariabel
+    private Car car;
+
     /*
         Ett fragment är som en "activity inuti en activity"
         När man "placerar ut" ett fragment "attachar" man det på en activity
@@ -26,6 +29,12 @@ public class CustomDialogFragment extends DialogFragment {
         Fragment: CustomDialogFragment
         Activity: MainActivity
      */
+
+    // Instansmetod
+    public void setCar(Car car) {
+        this.car = car;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -57,12 +66,15 @@ public class CustomDialogFragment extends DialogFragment {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 
         // Anpassa dialogrutan så som vi önskar
-        alertDialogBuilder.setMessage("Do you want to delete the car?");
+        alertDialogBuilder.setMessage("Do you want to delete the " + car.getName() + "?");
 
         // Bestäm text och funktion för vår cancel-knapp
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                // Kör metoden onCancelClick som finns i MainActivity
+                activity.onCancelClick(CustomDialogFragment.this);
 
             }
         });
@@ -72,6 +84,7 @@ public class CustomDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Kod som ska köras när man klickar på "Delete away"!
+                activity.onDeleteClick(CustomDialogFragment.this);
 
             }
         });
