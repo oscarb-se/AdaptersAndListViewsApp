@@ -1,6 +1,7 @@
 package se.oscarb.adaptersandlistviews;
 
 import android.content.DialogInterface;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,11 +14,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CustomDialogFragment.CustomDialogClickListener {
 
     // Instansvariabel
     ArrayList<String> carStrings;
-
+    MyCarArrayAdapter myCarArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Skapa en anpassad adapter för en egen layout och en samling Cars
-        final MyCarArrayAdapter myCarArrayAdapter = new MyCarArrayAdapter(this, android.R.layout.simple_list_item_1, carsFromGarage);
+       myCarArrayAdapter = new MyCarArrayAdapter(this, android.R.layout.simple_list_item_1, carsFromGarage);
 
         // Använd vår adapter
         //myListView.setAdapter(myBuiltInArrayAdapter);
@@ -73,43 +74,40 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 Toast.makeText(MainActivity.this, "Long click!", Toast.LENGTH_SHORT).show();
 
-                // Innan vi tar bort bilen, gör en dialogruta och fråga om det är ok!
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                // Här fanns det kod för att skapa en dialogruta, men det är nu flyttat till en egen klass
+                // Kolla i klassen CustomDialogFragment
 
-                // Anpassa dialogrutan så som vi önskar
-                alertDialogBuilder.setMessage("Do you want to delete the car?");
-
-                // Bestäm text och funktion för vår cancel-knapp
-                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Kod som körs när man klickar på Cancel
-                        Toast.makeText(MainActivity.this, "Phew, no car deleted!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                // Text och funktion för vår Delete-knapp
-                alertDialogBuilder.setPositiveButton("Delete away!", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Kod som ska köras när man klickar på "Delete away"!
-
-                        // Ta bort en bil från listan
-                        Car carToRemove = myCarArrayAdapter.getItem(position);
-                        ; // vilken bil ska vi ta bort?
-                        myCarArrayAdapter.remove(carToRemove); // Men vilken bil...?
-                    }
-                });
-
-                // Sätt samman dialogruta och visa upp den
-                alertDialogBuilder.create();
-                alertDialogBuilder.show();
-
+                // Skapa en ny instans av vår egen klass CustomDialogFragment
+                DialogFragment dialog = new CustomDialogFragment();
+                dialog.show(getSupportFragmentManager(), "CustomDialogFragment");
 
                 return false;
             }
         });
 
+
+    }
+
+    @Override
+    public void onCancelClick(DialogFragment dialog) {
+        // Kod som ska köras när man klickar på cancel i en dialogruta
+        // Kod som körs när man klickar på Cancel
+        Toast.makeText(this, "Phew, no car deleted!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDeleteClick(DialogFragment dialog) {
+        // Kod som ska köras när man klickar på Delete i en dialogruta
+
+        // TODO: Fixa så att det blir rätt position
+        // Tills dess, påhittad position:
+        int position = 0;
+
+
+        // Ta bort en bil från listan
+        Car carToRemove = myCarArrayAdapter.getItem(position);
+        ; // vilken bil ska vi ta bort?
+        myCarArrayAdapter.remove(carToRemove); // Men vilken bil...?
 
     }
 }
