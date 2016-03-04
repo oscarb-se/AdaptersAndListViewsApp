@@ -1,14 +1,17 @@
 package se.oscarb.adaptersandlistviews;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -64,6 +67,31 @@ public class MainActivity extends AppCompatActivity implements CustomDialogFragm
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(MainActivity.this, "Position: " + position + " id: " + id, Toast.LENGTH_LONG).show();
 
+                // Bilen som ska visas
+                Car carToDisplay = myCarArrayAdapter.getItem(position);
+
+                // Hämta storleken på skärmen
+                DisplayMetrics metrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+                // Vad ska hända när man klickar kort på knappen?
+                // Skapa en dialogruta med bilens logotyp i!
+                AlertDialog.Builder logoDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
+                // Skapa en View som du sedan byter ut bilden i viewn så den
+                // är bilens logotyp
+
+                View logotypeView = getLayoutInflater().inflate(R.layout.car_logotype, null, false);
+                ImageView logotypeImage = (ImageView) logotypeView.findViewById(R.id.logotype_image);
+                Bitmap optimizedLogo = ResizeImage.getOptimizedBitmap(MainActivity.this, carToDisplay.getLogotypeResourceId(), metrics.widthPixels, metrics.heightPixels);
+
+                logotypeImage.setImageBitmap(optimizedLogo);
+
+
+                logoDialogBuilder.setView(logotypeView);
+
+                logoDialogBuilder.create();
+                logoDialogBuilder.show();
 
 
             }
@@ -91,7 +119,8 @@ public class MainActivity extends AppCompatActivity implements CustomDialogFragm
                 // Visa dialogrutan
                 dialog.show(getSupportFragmentManager(), "CustomDialogFragment");
 
-                return false;
+                // Returnera sant så att LongClick inte också räknas som Click
+                return true;
             }
         });
 
@@ -111,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements CustomDialogFragm
 
         // Ta bort en bil från listan
         Car carToRemove = myCarArrayAdapter.getItem(lastClickedPosition);
-        ; // vilken bil ska vi ta bort?
+        // vilken bil ska vi ta bort?
         myCarArrayAdapter.remove(carToRemove); // Men vilken bil...?
 
     }
